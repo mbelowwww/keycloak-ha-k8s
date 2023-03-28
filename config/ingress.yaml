@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  labels:
+    app: keycloak-ha
+  name: keycloak-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/affinity: cookie
+    nginx.ingress.kubernetes.io/session-cookie-expires: "172800"
+    nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"
+    nginx.ingress.kubernetes.io/session-cookie-name: route
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: keycloak.ha
+    http:
+      paths:
+      - backend:
+          service:
+            name: keycloak-http
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
